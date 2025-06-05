@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Current Time</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <header class="theme-controls">
+        <button id="toggle" class="toggle-button">🌙 Switch to Dark Mode</button>
+        <label class="system-theme-label">
+            <input type="checkbox" id="systemThemeToggle" />
+            Follow System Preferences
+        </label>
+    </header>
+    <div class="timezone-controls">
+        <button id="add-timezone" class="timezone-button">Add Time Zone</button>
+        <select id="timezone-dropdown" class="timezone-dropdown hidden">
+            <option value="">Select a time zone</option>
+        </select>
+    </div>
+    <aside class="size-controls">
+        <div class="size-buttons">
+            <button id="size-small" class="size-button active" data-size="small">Small</button>
+            <button id="size-medium" class="size-button" data-size="medium">Medium</button>
+            <button id="size-large" class="size-button" data-size="large">Large</button>
+        </div>
+    </aside>
+    <main class="clock-container">
+        <div class="clock local-clock">
+            <div class="clock-label hidden">Local Time</div>
+            <div id="time" class="time-display"></div>
+            <div id="date" class="date-display"></div>
+            <div class="ampm-indicator">AM</div>
+        </div>
+        <div class="clock timezone-clock hidden">
+            <div class="clock-label" id="timezone-label">New York</div>
+            <div id="timezone-time" class="time-display"></div>
+            <div id="timezone-date" class="date-display"></div>
+            <div class="ampm-indicator">AM</div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
