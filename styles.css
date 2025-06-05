@@ -1,147 +1,190 @@
+/* 
+ * CSS Custom Properties (Variables)
+ * These variables define the core theming and sizing system
+ */
 :root {
-    --bg-color: #fff;
-    --text-color: #000;
-    --date-color: #666;
-    --accent-color: #007bff;
-    --clock-size: 5rem;
-    --label-size: 1.2rem;
-    --date-size: 1.2rem;
-    --ampm-size: 2rem;
-    --ampm-offset: 10px;
+    /* Color scheme variables - light mode defaults */
+    --bg-color: #fff;           /* Main background color */
+    --text-color: #000;         /* Primary text color */
+    --date-color: #666;         /* Secondary text color for dates/labels */
+    --accent-color: #007bff;    /* Brand/accent color for buttons */
+    
+    /* Typography size variables - responsive scaling system */
+    --clock-size: 5rem;         /* Main clock font size */
+    --label-size: 1.2rem;       /* Clock label font size */
+    --date-size: 1.2rem;        /* Date display font size */
+    --ampm-size: 2rem;          /* AM/PM indicator font size */
+    --ampm-offset: 10px;        /* Distance between clock and AM/PM indicator */
 }
 
+/* 
+ * Global Body Styles
+ * Sets up the main page layout and typography
+ */
 body {
-    font-family: 'Inter', sans-serif;
-    margin: 0;
-    height: 100vh;
-    display: flex;
+    font-family: 'Inter', sans-serif;  /* Modern, clean typeface */
+    margin: 0;                         /* Remove default margins */
+    height: 100vh;                     /* Full viewport height */
+    display: flex;                     /* Flexbox for centering */
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: var(--bg-color);
-    transition: background-color 0.3s, color 0.3s;
+    background-color: var(--bg-color); /* Use CSS variable for theming */
+    transition: background-color 0.3s, color 0.3s; /* Smooth theme transitions */
 }
 
 
+/* 
+ * Theme Controls Section
+ * Contains dark/light mode toggle and system preference checkbox
+ * Positioned in top-right corner
+ */
 .theme-controls {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    display: flex;
+    position: absolute;        /* Fixed positioning */
+    top: 20px;                /* Distance from top */
+    right: 20px;              /* Distance from right edge */
+    display: flex;            /* Vertical stacking */
     flex-direction: column;
-    align-items: flex-end;
-    gap: 10px;
+    align-items: flex-end;    /* Right-align items */
+    gap: 10px;               /* Space between controls */
 }
 
+/* Manual dark/light mode toggle button */
 .toggle-button {
-    padding: 10px 20px;
-    background: var(--accent-color);
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s;
+    padding: 10px 20px;                    /* Button padding */
+    background: var(--accent-color);       /* Use accent color */
+    color: #fff;                          /* White text */
+    border: none;                         /* Remove default border */
+    border-radius: 5px;                   /* Rounded corners */
+    cursor: pointer;                      /* Show clickable cursor */
+    transition: background 0.3s;          /* Smooth hover effect */
 }
 
+/* System theme preference label and checkbox */
 .system-theme-label {
-    font-size: 0.9rem;
-    color: var(--text-color);
-    cursor: pointer;
-    transition: color 0.3s;
+    font-size: 0.9rem;           /* Slightly smaller text */
+    color: var(--text-color);    /* Use theme text color */
+    cursor: pointer;             /* Make entire label clickable */
+    transition: color 0.3s;      /* Smooth color transitions */
 }
 
+/* Hover effect for theme toggle button (only when enabled) */
 .toggle-button:hover:not(:disabled) {
-    background: #0056b3;
+    background: #0056b3;           /* Darker blue on hover */
 }
 
+/* Disabled state for theme toggle (when system preferences is enabled) */
 .toggle-button:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-    opacity: 0.6;
+    background: #ccc;              /* Gray background when disabled */
+    cursor: not-allowed;           /* Show disabled cursor */
+    opacity: 0.6;                 /* Reduced opacity for disabled state */
 }
 
+/* 
+ * Size Controls Section
+ * Small/Medium/Large buttons for resizing clock display
+ * Positioned on the right side, vertically centered
+ */
 .size-controls {
-    position: absolute;
-    top: 50%;
-    right: 20px;
-    transform: translateY(-50%);
+    position: absolute;            /* Fixed positioning */
+    top: 50%;                     /* Vertical center */
+    right: 20px;                  /* Distance from right edge */
+    transform: translateY(-50%);   /* Perfect vertical centering */
 }
 
+/* Container for size control buttons */
 .size-buttons {
-    display: flex;
+    display: flex;                /* Vertical stacking */
     flex-direction: column;
-    gap: 8px;
+    gap: 8px;                    /* Space between buttons */
 }
 
+/* Individual size control buttons (Small, Medium, Large) */
 .size-button {
-    padding: 8px 16px;
-    background: transparent;
-    color: var(--text-color);
-    border: 2px solid var(--accent-color);
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.3s;
+    padding: 8px 16px;                     /* Button padding */
+    background: transparent;               /* Transparent background */
+    color: var(--text-color);             /* Use theme text color */
+    border: 2px solid var(--accent-color); /* Colored border */
+    border-radius: 5px;                   /* Rounded corners */
+    cursor: pointer;                      /* Show clickable cursor */
+    font-size: 0.9rem;                   /* Slightly smaller text */
+    transition: all 0.3s;                /* Smooth transitions */
 }
 
+/* Hover effect for size buttons */
 .size-button:hover {
-    background: var(--accent-color);
-    color: #fff;
+    background: var(--accent-color);      /* Fill with accent color */
+    color: #fff;                         /* White text on hover */
 }
 
+/* Active state for currently selected size */
 .size-button.active {
-    background: var(--accent-color);
-    color: #fff;
+    background: var(--accent-color);      /* Filled background */
+    color: #fff;                         /* White text */
 }
 
+/* 
+ * Timezone Controls Section
+ * Add/remove timezone button and timezone selection dropdown
+ * Positioned in top-left corner
+ */
 .timezone-controls {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    position: absolute;           /* Fixed positioning */
+    top: 20px;                   /* Distance from top */
+    left: 20px;                  /* Distance from left edge */
+    display: flex;               /* Horizontal layout */
+    align-items: center;         /* Vertical alignment */
+    gap: 10px;                   /* Space between button and dropdown */
 }
 
+/* Add/Remove timezone button */
 .timezone-button {
-    padding: 10px 20px;
-    background: var(--accent-color);
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s;
+    padding: 10px 20px;                /* Button padding */
+    background: var(--accent-color);   /* Use accent color */
+    color: #fff;                       /* White text */
+    border: none;                      /* Remove default border */
+    border-radius: 5px;                /* Rounded corners */
+    cursor: pointer;                   /* Show clickable cursor */
+    transition: background 0.3s;       /* Smooth hover effect */
 }
 
+/* Hover effect for timezone button */
 .timezone-button:hover {
-    background: #0056b3;
+    background: #0056b3;               /* Darker blue on hover */
 }
 
+/* Timezone selection dropdown */
 .timezone-dropdown {
-    padding: 8px 12px;
-    border: 2px solid var(--accent-color);
-    border-radius: 5px;
-    background: var(--bg-color);
-    color: var(--text-color);
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.3s;
-    min-width: 200px;
+    padding: 8px 12px;                 /* Dropdown padding */
+    border: 2px solid var(--accent-color); /* Colored border */
+    border-radius: 5px;                /* Rounded corners */
+    background: var(--bg-color);       /* Use theme background */
+    color: var(--text-color);          /* Use theme text color */
+    font-size: 0.9rem;                 /* Slightly smaller text */
+    cursor: pointer;                   /* Show clickable cursor */
+    transition: all 0.3s;              /* Smooth transitions */
+    min-width: 200px;                  /* Minimum width for readability */
 }
 
+/* Focus state for dropdown */
 .timezone-dropdown:focus {
-    outline: none;
-    border-color: #0056b3;
+    outline: none;                     /* Remove default outline */
+    border-color: #0056b3;             /* Darker border on focus */
 }
 
+/* 
+ * Utility Classes
+ * Common classes for hiding/showing elements
+ */
 .hidden {
-    display: none;
+    display: none;                     /* Completely hide element */
 }
 
+/* Special hidden state for clock labels - maintains layout but invisible */
 .clock-label.hidden {
-    display: block;
-    opacity: 0;
-    transform: translateY(-10px);
+    display: block;                    /* Keep in layout */
+    opacity: 0;                       /* Make invisible */
+    transform: translateY(-10px);      /* Slight upward offset */
 }
 
 .clock-container {
@@ -155,127 +198,172 @@ body {
     height: 100vh;
 }
 
+/* 
+ * Main Clock Container
+ * Houses both local and timezone clocks with responsive layout
+ * Handles smooth transitions between single and dual clock modes
+ */
 .clock-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 3rem;
-    transition: all 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
-    width: 100%;
-    max-width: 100vw;
-    height: 100vh;
+    display: flex;                              /* Flexbox layout */
+    flex-direction: column;                     /* Vertical stacking */
+    align-items: center;                        /* Horizontal centering */
+    justify-content: center;                    /* Vertical centering */
+    gap: 3rem;                                 /* Space between clocks */
+    transition: all 0.5s cubic-bezier(0.4, 0.0, 0.2, 1); /* Smooth animations */
+    width: 100%;                               /* Full width */
+    max-width: 100vw;                          /* Prevent horizontal overflow */
+    height: 100vh;                             /* Full viewport height */
 }
 
+/* Single clock mode - only local clock visible */
 .clock-container.single-clock {
-    justify-content: center;
-    gap: 0;
+    justify-content: center;                    /* Center vertically */
+    gap: 0;                                    /* No gap needed */
 }
 
+/* Local clock positioning in single mode */
 .clock-container.single-clock .local-clock {
-    transform: translateY(0);
+    transform: translateY(0);                   /* No vertical offset */
 }
 
+/* Dual clock mode - both clocks visible */
 .clock-container.dual-clock {
-    justify-content: center;
-    gap: 3rem;
+    justify-content: center;                    /* Center the group */
+    gap: 3rem;                                 /* Space between clocks */
 }
 
+/* Local clock positioning in dual mode - slightly higher to balance layout */
 .clock-container.dual-clock .local-clock {
-    transform: translateY(-3rem);
+    transform: translateY(-3rem);               /* Move up to center both clocks */
 }
 
+/* 
+ * Individual Clock Styles
+ * Base styles for both local and timezone clocks
+ */
 .clock {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 0.5s cubic-bezier(0.4, 0.0, 0.2, 1), 
-                transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
-    position: relative;
+    display: flex;                              /* Flexbox layout */
+    flex-direction: column;                     /* Vertical stacking of elements */
+    align-items: center;                        /* Center all elements horizontally */
+    gap: 0.5rem;                               /* Space between clock elements */
+    opacity: 1;                                /* Fully visible by default */
+    transform: translateY(0);                   /* No transform by default */
+    transition: opacity 0.5s cubic-bezier(0.4, 0.0, 0.2, 1),  /* Smooth fade animations */
+                transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1); /* Smooth movement animations */
+    position: relative;                         /* For absolute positioning of AM/PM */
 }
 
+/* 
+ * Timezone Clock Hidden State
+ * Uses visibility and opacity for smooth show/hide without layout shifts
+ */
 .timezone-clock.hidden {
-    visibility: hidden;
-    opacity: 0;
-    transform: translateY(20px);
-    pointer-events: none;
+    visibility: hidden;                         /* Remove from accessibility tree */
+    opacity: 0;                                /* Make invisible */
+    transform: translateY(20px);                /* Slight downward offset when hidden */
+    pointer-events: none;                       /* Disable interactions */
 }
 
+/* Timezone clock visible state */
 .timezone-clock {
-    visibility: visible;
+    visibility: visible;                        /* Make accessible */
 }
 
 
+/* 
+ * Clock Labels
+ * "Local Time" and timezone city names displayed above each clock
+ */
 .clock-label {
-    font-family: 'Inter', sans-serif;
-    font-weight: 500;
-    font-size: var(--label-size);
-    color: var(--date-color);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    transition: color 0.3s, font-size 0.3s;
+    font-family: 'Inter', sans-serif;           /* Match main typography */
+    font-weight: 500;                          /* Medium weight */
+    font-size: var(--label-size);              /* Responsive size */
+    color: var(--date-color);                  /* Secondary color */
+    text-transform: uppercase;                 /* All caps for distinction */
+    letter-spacing: 0.1em;                     /* Slight letter spacing */
+    transition: color 0.3s, font-size 0.3s;    /* Smooth theme and size transitions */
 }
 
+/* 
+ * Main Time Display
+ * Shows the HH:MM:SS time in large format
+ */
 .time-display {
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
-    font-size: var(--clock-size);
-    color: var(--text-color);
-    transition: color 0.3s;
-    display: flex;
-    align-items: baseline;
-    justify-content: center;
+    font-family: 'Inter', sans-serif;           /* Match main typography */
+    font-weight: 700;                          /* Bold weight for prominence */
+    font-size: var(--clock-size);              /* Responsive sizing */
+    color: var(--text-color);                  /* Primary text color */
+    transition: color 0.3s;                    /* Smooth theme transitions */
+    display: flex;                             /* Flexbox for layout control */
+    align-items: baseline;                     /* Baseline alignment */
+    justify-content: center;                   /* Center horizontally */
 }
 
+/* Time numbers container (hours:minutes:seconds) */
 .time-numbers {
-    text-align: center;
+    text-align: center;                        /* Center the numbers */
 }
 
+/* 
+ * AM/PM Indicator
+ * Positioned to the right of the time display with fixed offset
+ */
 .ampm-indicator {
-    position: absolute;
-    left: calc(100% + var(--ampm-offset));
-    top: 50%;
-    transform: translateY(-50%);
-    font-family: 'Inter', sans-serif;
-    font-weight: 400;
-    font-size: var(--ampm-size);
-    color: var(--text-color);
-    transition: color 0.3s, font-size 0.3s, left 0.3s;
+    position: absolute;                        /* Position relative to clock container */
+    left: calc(100% + var(--ampm-offset));     /* Fixed distance from time display */
+    top: 50%;                                  /* Vertical center */
+    transform: translateY(-50%);               /* Perfect vertical centering */
+    font-family: 'Inter', sans-serif;          /* Match main typography */
+    font-weight: 400;                         /* Normal weight */
+    font-size: var(--ampm-size);              /* Responsive sizing */
+    color: var(--text-color);                 /* Primary text color */
+    transition: color 0.3s, font-size 0.3s, left 0.3s; /* Smooth transitions */
 }
 
+/* Animation class for time display during size changes */
 .time-display.animate-resize {
-    transition: color 0.3s, font-size 0.3s;
+    transition: color 0.3s, font-size 0.3s;    /* Enhanced transitions during resize */
 }
 
+/* 
+ * Date Display
+ * Shows the full date below the time in "Day, Month Date, Year" format
+ */
 .date-display {
-    font-family: 'Inter', sans-serif;
-    font-weight: 400;
-    font-size: var(--date-size);
-    color: var(--date-color);
-    margin-top: 1rem;
-    transition: color 0.3s, font-size 0.3s;
+    font-family: 'Inter', sans-serif;           /* Match main typography */
+    font-weight: 400;                          /* Normal weight */
+    font-size: var(--date-size);               /* Responsive sizing */
+    color: var(--date-color);                  /* Secondary color */
+    margin-top: 1rem;                          /* Space above date */
+    transition: color 0.3s, font-size 0.3s;    /* Smooth theme and size transitions */
 }
 
+/* 
+ * Seconds Styling
+ * De-emphasized seconds within the time display
+ */
 .seconds {
-    font-size: 0.7em;
-    font-weight: 400;
-    color: var(--date-color);
-    opacity: 0.8;
+    font-size: 0.7em;                          /* 70% of parent size */
+    font-weight: 400;                         /* Normal weight (vs bold time) */
+    color: var(--date-color);                 /* Secondary color */
+    opacity: 0.8;                             /* Slightly transparent */
 }
 
+/* 
+ * Dark Mode Theme
+ * Overrides color variables for dark theme
+ */
 .dark-mode {
-    --bg-color: #121212;
-    --text-color: #fff;
-    --date-color: #ccc;
+    --bg-color: #121212;                       /* Dark background */
+    --text-color: #fff;                       /* White text */
+    --date-color: #ccc;                       /* Light gray for secondary text */
 }
 
+/* Legacy dark mode styles (kept for compatibility) */
 .dark-mode #time {
-    color: #fff;
+    color: #fff;                              /* White time text */
 }
 
 .dark-mode #date {
-    color: #ccc;
+    color: #ccc;                              /* Light gray date text */
 }

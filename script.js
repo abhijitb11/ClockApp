@@ -1,19 +1,41 @@
+/**
+ * Clock Application - Main JavaScript File
+ * 
+ * This application provides a real-time clock display with the following features:
+ * - Local time display with 12-hour format
+ * - Optional second timezone display
+ * - Dark/light theme support with system preference detection
+ * - Responsive sizing (small, medium, large)
+ * - Smooth animations and transitions
+ * 
+ * All settings are persisted in localStorage for user preferences
+ */
+
+/**
+ * Main time update function - called every second
+ * Updates both local and timezone displays
+ */
 function updateTime() {
     const now = new Date();
 
-    // Local time
+    // Convert to 12-hour format for local time
     let hours = now.getHours();
     const minutes = String(now.getMinutes()).padStart(2, '0');
     const seconds = String(now.getSeconds()).padStart(2, '0');
     const ampm = hours >= 12 ? 'PM' : 'AM';
     
+    // Convert 24-hour to 12-hour format
     hours = hours % 12;
-    hours = hours ? hours : 12; // 0 should be 12
+    hours = hours ? hours : 12; // 0 should be 12 (midnight)
+    
+    // Create time string with styled seconds
     const timeString = `<span class="time-numbers">${hours}:${minutes}:<span class="seconds">${seconds}</span></span>`;
 
+    // Format date as "Weekday, Month Day, Year"
     const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
     const dateString = now.toLocaleDateString(undefined, options);
 
+    // Update DOM elements
     document.getElementById('time').innerHTML = timeString;
     document.getElementById('date').textContent = dateString;
     
@@ -21,47 +43,64 @@ function updateTime() {
     const localAmpmEl = document.querySelector('.local-clock .ampm-indicator');
     if (localAmpmEl) localAmpmEl.textContent = ampm;
 
-    // Always update timezone time if we have a selected timezone
+    // Update timezone display if timezone is selected or use default for pre-population
     const selectedTimezone = localStorage.getItem('selectedTimezone');
     const currentTimezone = getCurrentTimezone();
     updateTimezoneTime(selectedTimezone || currentTimezone);
 }
 
+/**
+ * Get current timezone for pre-population
+ * Returns the dropdown value or first timezone as default
+ */
 function getCurrentTimezone() {
-    // Get the currently displayed timezone from dropdown or default
     const dropdown = document.getElementById('timezone-dropdown');
     return dropdown && dropdown.value ? dropdown.value : timeZones[0].value;
 }
 
+/**
+ * Update timezone clock display
+ * Formats time and date for the specified timezone
+ * @param {string} timezone - IANA timezone identifier (e.g., 'America/New_York')
+ */
 function updateTimezoneTime(timezone) {
     if (!timezone) return;
     
     const now = new Date();
     
+    // Configuration for time formatting (12-hour with AM/PM)
     const timeOptions = { 
         timeZone: timezone,
         hour12: true,
-        hour: 'numeric',
-        minute: '2-digit',
-        second: '2-digit'
+        hour: 'numeric',        // No leading zero for hours
+        minute: '2-digit',      // Always 2 digits for minutes
+        second: '2-digit'       // Always 2 digits for seconds
     };
     
+    // Configuration for date formatting
     const dateOptions = { 
         timeZone: timezone,
-        weekday: 'long', 
-        month: 'long', 
-        day: 'numeric', 
-        year: 'numeric' 
+        weekday: 'long',        // Full weekday name
+        month: 'long',          // Full month name
+        day: 'numeric',         // Day without leading zero
+        year: 'numeric'         // Full year
     };
     
+    // Generate formatted strings
     let timezoneTimeString = now.toLocaleTimeString('en-US', timeOptions);
     const timezoneDateString = now.toLocaleDateString('en-US', dateOptions);
     
-    // Extract AM/PM and add span around seconds for styling
+    // Extract AM/PM indicator and style the time display
     const ampmMatch = timezoneTimeString.match(/\s([AP]M)/);
     const ampmPart = ampmMatch ? ampmMatch[1] : '';
-    timezoneTimeString = timezoneTimeString.replace(/(\d{1,2}:\d{2}):(\d{2})\s[AP]M/, '<span class="time-numbers">$1:<span class="seconds">$2</span></span>');
     
+    // Add styling spans to match local time format
+    timezoneTimeString = timezoneTimeString.replace(
+        /(\d{1,2}:\d{2}):(\d{2})\s[AP]M/, 
+        '<span class="time-numbers">$1:<span class="seconds">$2</span></span>'
+    );
+    
+    // Update DOM elements
     const timezoneTimeEl = document.getElementById('timezone-time');
     const timezoneDateEl = document.getElementById('timezone-date');
     const timezoneAmpmEl = document.querySelector('.timezone-clock .ampm-indicator');
@@ -71,22 +110,27 @@ function updateTimezoneTime(timezone) {
     if (timezoneAmpmEl) timezoneAmpmEl.textContent = ampmPart;
 }
 
-// Dark mode toggle
+/* ============================================================================
+ * DOM ELEMENT REFERENCES AND CONFIGURATION
+ * ============================================================================ */
+
+// Theme control elements
 const toggleButton = document.getElementById('toggle');
 const systemThemeToggle = document.getElementById('systemThemeToggle');
 const html = document.documentElement;
 
-// Clock size controls
+// Size control elements
 const sizeButtons = document.querySelectorAll('.size-button');
-const clockSizeMap = {
-    small: '5rem',
-    medium: '8rem',
-    large: '12rem'
-};
 
-// Timezone controls
+// Timezone control elements
 const addTimezoneButton = document.getElementById('add-timezone');
 const timezoneDropdown = document.getElementById('timezone-dropdown');
+
+/**
+ * Comprehensive timezone database
+ * Ordered by UTC offset from UTC-11 to UTC+14
+ * Each entry contains IANA timezone identifier and display label with UTC offset
+ */
 const timeZones = [
     { value: 'Pacific/Midway', label: 'Midway (UTC-11)' },
     { value: 'Pacific/Honolulu', label: 'Honolulu (UTC-10)' },

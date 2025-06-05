@@ -3,44 +3,74 @@
 <head>
     <meta charset="UTF-8" />
     <title>Current Time</title>
+    <!-- Google Fonts - Inter font family for modern, clean typography -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <!-- Main stylesheet -->
     <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+    <!-- Theme Controls: Dark/Light mode toggle and system preference option -->
     <header class="theme-controls">
+        <!-- Manual dark/light mode toggle button -->
         <button id="toggle" class="toggle-button">🌙 Switch to Dark Mode</button>
+        <!-- Checkbox to follow system theme preferences (auto dark/light mode) -->
         <label class="system-theme-label">
             <input type="checkbox" id="systemThemeToggle" />
             Follow System Preferences
         </label>
     </header>
+
+    <!-- Timezone Controls: Add/remove second timezone functionality -->
     <div class="timezone-controls">
+        <!-- Button to add or remove second timezone -->
         <button id="add-timezone" class="timezone-button">Add Time Zone</button>
+        <!-- Dropdown to select timezone (hidden by default) -->
         <select id="timezone-dropdown" class="timezone-dropdown hidden">
             <option value="">Select a time zone</option>
+            <!-- Timezone options populated dynamically via JavaScript -->
         </select>
     </div>
+
+    <!-- Size Controls: Buttons to resize clock display -->
     <aside class="size-controls">
         <div class="size-buttons">
+            <!-- Small size option (default) -->
             <button id="size-small" class="size-button active" data-size="small">Small</button>
+            <!-- Medium size option -->
             <button id="size-medium" class="size-button" data-size="medium">Medium</button>
+            <!-- Large size option -->
             <button id="size-large" class="size-button" data-size="large">Large</button>
         </div>
     </aside>
+
+    <!-- Main Clock Container: Houses both local and timezone clocks -->
     <main class="clock-container">
+        <!-- Local Clock: Primary time display showing user's local time -->
         <div class="clock local-clock">
+            <!-- Label for local time (hidden in single-clock mode) -->
             <div class="clock-label hidden">Local Time</div>
+            <!-- Time display in HH:MM:SS format -->
             <div id="time" class="time-display"></div>
+            <!-- Date display in "Day, Month Date, Year" format -->
             <div id="date" class="date-display"></div>
+            <!-- AM/PM indicator positioned to the right of time -->
             <div class="ampm-indicator">AM</div>
         </div>
+
+        <!-- Timezone Clock: Secondary time display for selected timezone -->
         <div class="clock timezone-clock hidden">
+            <!-- Label showing selected timezone city -->
             <div class="clock-label" id="timezone-label">New York</div>
+            <!-- Time display for selected timezone -->
             <div id="timezone-time" class="time-display"></div>
+            <!-- Date display for selected timezone -->
             <div id="timezone-date" class="date-display"></div>
+            <!-- AM/PM indicator for timezone -->
             <div class="ampm-indicator">AM</div>
         </div>
     </main>
+
+    <!-- JavaScript functionality -->
     <script src="script.js"></script>
 </body>
 </html>
