@@ -367,3 +367,29 @@ body {
 .dark-mode #date {
     color: #ccc;                              /* Light gray date text */
 }
+
+/* 
+ * Repository Link Footer
+ * Discreet link to source code positioned at bottom of page
+ */
+.repo-link {
+    position: fixed;                          /* Fixed positioning */
+    bottom: 20px;                            /* Distance from bottom */
+    left: 50%;                               /* Horizontal center */
+    transform: translateX(-50%);             /* Perfect centering */
+    z-index: 1000;                          /* Above other elements */
+}
+
+.repo-link a {
+    font-family: 'Inter', sans-serif;        /* Match main typography */
+    font-size: 0.8rem;                      /* Small, unobtrusive size */
+    color: var(--date-color);               /* Secondary color */
+    text-decoration: none;                   /* Remove underline */
+    opacity: 0.7;                           /* Subtle appearance */
+    transition: opacity 0.3s, color 0.3s;   /* Smooth hover effects */
+}
+
+.repo-link a:hover {
+    opacity: 1;                             /* Full opacity on hover */
+    color: var(--accent-color);             /* Accent color on hover */
+}
