@@ -15,6 +15,10 @@
     --date-size: 1.2rem;        /* Date display font size */
     --ampm-size: 2rem;          /* AM/PM indicator font size */
     --ampm-offset: 10px;        /* Distance between clock and AM/PM indicator */
+
+    /* Tell the browser which color schemes this page supports so native UI    */
+    /* (form controls, scrollbars) matches the manually-toggled light theme.   */
+    color-scheme: light;
 }
 
 /* 
@@ -24,7 +28,8 @@
 body {
     font-family: 'Inter', sans-serif;  /* Modern, clean typeface */
     margin: 0;                         /* Remove default margins */
-    height: 100vh;                     /* Full viewport height */
+    height: 100vh;                     /* Full viewport height (fallback for browsers without dvh support) */
+    height: 100dvh;                    /* Dynamic viewport height - avoids mobile browser chrome jumps */
     display: flex;                     /* Flexbox for centering */
     flex-direction: column;
     align-items: center;
@@ -168,8 +173,21 @@ body {
 
 /* Focus state for dropdown */
 .timezone-dropdown:focus {
-    outline: none;                     /* Remove default outline */
     border-color: #0056b3;             /* Darker border on focus */
+}
+
+/*
+ * Keyboard Focus Indicators
+ * Uses :focus-visible so the outline only appears for keyboard/assistive
+ * navigation (not on mouse click), giving visible focus without hurting
+ * the mouse-driven visual design.
+ */
+.timezone-dropdown:focus-visible,
+.toggle-button:focus-visible,
+.timezone-button:focus-visible,
+.size-button:focus-visible {
+    outline: 2px solid var(--accent-color);    /* Clear, high-contrast outline */
+    outline-offset: 2px;                       /* Small gap between control and outline */
 }
 
 /* 
@@ -187,18 +205,7 @@ body {
     transform: translateY(-10px);      /* Slight upward offset */
 }
 
-.clock-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
-    width: 100%;
-    max-width: 100vw;
-    height: 100vh;
-}
-
-/* 
+/*
  * Main Clock Container
  * Houses both local and timezone clocks with responsive layout
  * Handles smooth transitions between single and dual clock modes
@@ -212,7 +219,8 @@ body {
     transition: all 0.5s cubic-bezier(0.4, 0.0, 0.2, 1); /* Smooth animations */
     width: 100%;                               /* Full width */
     max-width: 100vw;                          /* Prevent horizontal overflow */
-    height: 100vh;                             /* Full viewport height */
+    height: 100vh;                             /* Full viewport height (fallback for browsers without dvh support) */
+    height: 100dvh;                            /* Dynamic viewport height - accounts for mobile browser chrome */
 }
 
 /* Single clock mode - only local clock visible */
@@ -357,15 +365,9 @@ body {
     --bg-color: #121212;                       /* Dark background */
     --text-color: #fff;                       /* White text */
     --date-color: #ccc;                       /* Light gray for secondary text */
-}
 
-/* Legacy dark mode styles (kept for compatibility) */
-.dark-mode #time {
-    color: #fff;                              /* White time text */
-}
-
-.dark-mode #date {
-    color: #ccc;                              /* Light gray date text */
+    /* Native UI (form controls, scrollbars) should render dark to match */
+    color-scheme: dark;
 }
 
 /* 
@@ -392,4 +394,75 @@ body {
 .repo-link a:hover {
     opacity: 1;                             /* Full opacity on hover */
     color: var(--accent-color);             /* Accent color on hover */
+}
+
+/*
+ * Reduced Motion Preference
+ * Respects users who have requested reduced motion at the OS level by
+ * collapsing all transitions/animations to effectively instant, while
+ * leaving layout and functionality untouched.
+ */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/*
+ * Small Screen Layout (phones)
+ * The desktop layout absolutely-positions the theme, timezone, and size
+ * controls in the page corners. On narrow viewports those corners overlap
+ * the clock itself, so below this breakpoint every control group is pulled
+ * out of absolute positioning and stacked as full-width, wrapping rows at
+ * the top of the page. The clock container then grows to fill whatever
+ * vertical space remains.
+ */
+@media (max-width: 600px) {
+    body {
+        justify-content: flex-start;        /* Controls stack at top, clock fills the rest */
+    }
+
+    /* Turn each corner control group into a static, centered, wrapping row */
+    .theme-controls,
+    .timezone-controls,
+    .size-controls {
+        position: static;                   /* Remove from absolute corner positioning */
+        top: auto;
+        left: auto;
+        right: auto;
+        transform: none;                    /* Cancel .size-controls' translateY(-50%) centering */
+        width: 100%;
+        display: flex;                      /* .size-controls has no flex display of its own on desktop */
+        flex-direction: row;                /* Lay controls out horizontally */
+        flex-wrap: wrap;                    /* Wrap to a second line if they don't fit */
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 10px 0;
+        box-sizing: border-box;
+    }
+
+    /* Lay the size buttons out horizontally too, to match the row layout */
+    .size-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    /* Shrink the dropdown's minimum width so it fits alongside the button on narrow screens */
+    .timezone-dropdown {
+        min-width: 140px;
+    }
+
+    /* Let the clock container grow to occupy the remaining vertical space */
+    .clock-container {
+        flex: 1 1 auto;                     /* Fill remaining height below the stacked controls */
+        height: auto;                       /* Defer sizing to flex-grow instead of viewport units */
+        min-height: 0;                      /* Allow proper flex shrinking inside body */
+    }
 }

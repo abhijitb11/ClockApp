@@ -2,12 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
+    <!-- Responsive viewport: ensures correct scaling and layout on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Description for search engines and social previews -->
+    <meta name="description" content="A modern web-based clock with dual timezone support, light/dark themes, and adjustable display size.">
+    <!-- Browser UI (address bar) tint, matched to the light/dark background colors defined in styles.css -->
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)">
     <title>Current Time</title>
-    <!-- Favicons and app icons -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
+    <!-- Favicons and app icons (relative paths so the app works when served from any subdirectory) -->
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <!-- Preconnect to Google Fonts origins to speed up font loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- Google Fonts - Inter font family for modern, clean typography -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <!-- Main stylesheet -->
@@ -30,7 +40,7 @@
         <!-- Button to add or remove second timezone -->
         <button id="add-timezone" class="timezone-button">Add Time Zone</button>
         <!-- Dropdown to select timezone (hidden by default) -->
-        <select id="timezone-dropdown" class="timezone-dropdown hidden">
+        <select id="timezone-dropdown" class="timezone-dropdown hidden" aria-label="Select a time zone">
             <option value="">Select a time zone</option>
             <!-- Timezone options populated dynamically via JavaScript -->
         </select>
@@ -81,6 +91,6 @@
     </footer>
 
     <!-- JavaScript functionality -->
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
 </body>
 </html>

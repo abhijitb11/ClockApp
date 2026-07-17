@@ -4,30 +4,33 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a modern web-based clock application with comprehensive features including dual timezone support, theme management, and responsive sizing. The application consists of three main files located in the `html/` directory:
+This is a modern web-based clock application with comprehensive features including dual timezone support, theme management, and responsive sizing. The application uses ES modules with the following structure in the `html/` directory:
 
 - `html/index.html` - Main HTML structure with comprehensive layout and semantic markup
-- `html/script.js` - JavaScript for time updates, timezone management, theme switching, and UI interactions
+- `html/script.js` - Application entry point (ES module) for DOM wiring and UI interactions
+- `html/clock-core.js` - Pure formatting helpers (formatClockParts, formatDateString, getOffsetLabel) built on cached `Intl.DateTimeFormat` instances
+- `html/timezones.js` - Timezone data export (55+ cities with IANA identifiers; `Asia/Yangon` replaces deprecated `Asia/Rangoon`)
 - `html/styles.css` - CSS styling with CSS custom properties, animations, and responsive design
 
 ## Architecture
 
-The application uses vanilla HTML/CSS/JavaScript with no build process or dependencies. Key architectural patterns:
+The application uses vanilla HTML/CSS/JavaScript with no build process or runtime dependencies (pnpm is used only for tests and the local dev server). Key architectural patterns:
 
 - **Dual Clock System**: Supports both local time and secondary timezone display with smooth layout transitions
 - **Theme System**: Uses CSS custom properties (`:root` variables) with `.dark-mode` class and system preference detection
 - **Responsive Sizing**: Proportional scaling system using CSS variables for clock, labels, dates, and AM/PM indicators
-- **State Management**: All preferences persisted in `localStorage` (theme, size, timezone, system preferences)
-- **Animation System**: CSS transitions with cubic-bezier easing for smooth user experience
-- **Time Updates**: Uses `setInterval()` with timezone-aware formatting via `Intl.DateTimeFormat`
+- **State Management**: All preferences persisted in `localStorage` (theme, size, timezone, system preferences) with defensive try/catch wrapping
+- **Animation System**: CSS transitions with cubic-bezier easing for smooth user experience; prefers-reduced-motion support
+- **Time Updates**: Drift-free clock ticks via aligned `setTimeout()` with timezone-aware formatting via cached `Intl.DateTimeFormat` instances
+- **Module Architecture**: ES module structure separating pure formatting logic (clock-core.js) from DOM wiring (script.js) and timezone data (timezones.js)
 
 ## Major Features Implemented
 
 ### Timezone Management
-- 55+ world timezones ordered by UTC offset (-11 to +14)
+- 55+ world timezones ordered by UTC offset (-11 to +14); IANA identifiers with automatic DST handling
+- Dropdown offset labels computed at load time via `getOffsetLabel()` using `timeZoneName: 'shortOffset'` for DST-correct formatting
 - Smooth add/remove animations with proper state transitions
 - Pre-populated content to eliminate loading delays
-- IANA timezone identifiers with automatic DST handling
 
 ### Theme System
 - Manual dark/light mode toggle
@@ -53,17 +56,32 @@ The application uses vanilla HTML/CSS/JavaScript with no build process or depend
 ```
 clockapp/
 ├── html/
-│   ├── index.html     # Main application
-│   ├── styles.css     # All styling and themes  
-│   └── script.js      # Application logic
-├── README.md          # User documentation
-└── CLAUDE.md          # This development guide
+│   ├── index.html          # Main application
+│   ├── script.js           # DOM wiring (ES module)
+│   ├── clock-core.js       # Pure formatting helpers
+│   ├── timezones.js        # Timezone data
+│   ├── styles.css          # Styling with CSS custom properties
+│   ├── favicon.ico         # Favicon
+│   └── site.webmanifest    # Web app manifest
+├── tests/
+│   ├── clock-core.test.js  # Unit tests for formatting helpers (Vitest)
+│   └── app-smoke.test.js   # DOM smoke tests for script.js wiring (Vitest + jsdom)
+├── package.json            # Dependencies and scripts
+├── README.md               # User documentation
+└── CLAUDE.md               # This development guide
 ```
 
 ### Running Locally
-- Open `html/index.html` directly in a browser or serve via any static file server
-- No build/lint/test commands - this is a simple static site with no tooling setup
-- Test in multiple browsers and verify all features work with system preferences
+- Install dependencies once: `pnpm install`
+- Start a static server: `pnpm serve` (Python HTTP server on port 8000 serving the `html/` directory)
+- Open `http://localhost:8000` in your browser
+- Note: ES modules require a server; direct file:// URLs will not work
+
+### Testing
+- Run `pnpm test` to execute the test suite (Vitest)
+- Unit tests cover core formatting functions: `formatClockParts`, `formatDateString`, `getOffsetLabel`
+- DOM smoke tests (jsdom) exercise the real `script.js` module: initial render, drift-free ticking, timezone add/remove flow, theme toggle, and size controls
+- Verify all features work with system preferences in multiple browsers
 
 ### Code Quality
 - **Comprehensive Documentation**: All files contain extensive inline comments explaining functionality

@@ -37,9 +37,10 @@ A modern, responsive web-based clock application with dual timezone support, mul
 ## Usage
 
 ### Getting Started
-1. Open `html/index.html` in any modern web browser
-2. The clock will immediately display your local time
-3. Use the controls to customize your experience
+1. Run `pnpm serve` to start a static server (serves the `html/` directory on port 8000)
+2. Open `http://localhost:8000` in your browser
+3. The clock will immediately display your local time
+4. Use the controls to customize your experience
 
 ### Adding a Second Timezone
 1. Click **"Add Time Zone"** in the top-left corner
@@ -77,15 +78,31 @@ All preferences are automatically saved to `localStorage`:
 ```
 clockapp/
 ├── html/
-│   ├── index.html     # Main application
-│   ├── styles.css     # All styling and themes
-│   └── script.js      # Application logic
-├── README.md          # This documentation
-└── CLAUDE.md          # Development notes
+│   ├── index.html          # Main application
+│   ├── script.js           # Application entry point (ES module)
+│   ├── clock-core.js       # Formatting helpers (pure functions)
+│   ├── timezones.js        # Timezone data
+│   ├── styles.css          # All styling and themes
+│   ├── favicon.ico         # Favicon
+│   └── site.webmanifest    # Web app manifest
+├── tests/
+│   ├── clock-core.test.js  # Unit tests for formatting helpers
+│   └── app-smoke.test.js   # DOM smoke tests for the app wiring (jsdom)
+├── package.json            # Dependencies and scripts
+├── README.md               # This documentation
+└── CLAUDE.md               # Development notes
 ```
 
 ### Timezone Support
 Uses JavaScript's built-in `Intl.DateTimeFormat` API with IANA timezone identifiers for accurate timezone conversion and daylight saving time handling.
+
+## Testing
+
+The application includes unit tests for core formatting functions and DOM smoke tests for the main user flows:
+- Run `pnpm install` once to install dependencies
+- Run `pnpm test` to execute the test suite (Vitest)
+- Unit tests cover timezone offset calculation, time formatting, and date string generation
+- Smoke tests (jsdom) exercise the rendered clock, ticking, timezone add/remove, theme toggle, and size controls
 
 ## Development
 

@@ -1,0 +1,14 @@
+{
+  "name": "clockapp",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.13.1",
+  "scripts": {
+    "test": "vitest run",
+    "serve": "python3 -m http.server -d html 8000"
+  },
+  "devDependencies": {
+    "jsdom": "^29.1.1",
+    "vitest": "^3.2.4"
+  }
+}
