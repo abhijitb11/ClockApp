@@ -2,7 +2,7 @@
   "name": "clockapp",
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@11.17.0",
+  "packageManager": "pnpm@11.19.0",
   "scripts": {
     "test": "vitest run",
     "serve": "python3 -m http.server -d html 8000"
